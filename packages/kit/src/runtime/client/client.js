@@ -65,7 +65,9 @@ if (import.meta.env.DEV) {
 		const url = input instanceof Request ? input.url : input.toString();
 		const stack = /** @type {string} */ (new Error().stack);
 
-		const heuristic = can_inspect_stack_trace ? stack.includes('load_node') : loading;
+		const heuristic = can_inspect_stack_trace
+			? stack.includes('load_node') && !stack.includes('initial_fetch')
+			: loading;
 		if (heuristic) {
 			console.warn(
 				`Loading ${url} using \`window.fetch\`. For best results, use the \`fetch\` that is passed to your \`load\` function: https://kit.svelte.dev/docs/loading#input-fetch`
