@@ -57,7 +57,7 @@ function update_scroll_positions(index) {
  * }} opts
  * @returns {import('./types').Client}
  */
-export function create_client({ target, session, base, trailing_slash }) {
+export function create_client({ target, session, env, base, trailing_slash }) {
 	/** @type {Map<string, import('./types').NavigationResult>} */
 	const cache = new Map();
 

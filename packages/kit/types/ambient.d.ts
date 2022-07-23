@@ -90,6 +90,8 @@ declare module '$app/env' {
 	 * `true` when prerendering, `false` otherwise.
 	 */
 	export const prerendering: boolean;
+
+	export const runtimeEnv: Record<string, string | undefined>;
 }
 
 /**

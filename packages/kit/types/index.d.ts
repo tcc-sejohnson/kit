@@ -160,6 +160,10 @@ export interface GetSession {
 	(event: RequestEvent): MaybePromise<App.Session>;
 }
 
+export interface GetEnv {
+	(): Record<string, string | undefined>;
+}
+
 export interface Handle {
 	(input: {
 		event: RequestEvent;

@@ -30,12 +30,14 @@ export async function render_page(event, route, options, state, resolve_opts) {
 	}
 
 	const $session = await options.hooks.getSession(event);
+	const $env = options.hooks.getEnv();
 
 	return respond({
 		event,
 		options,
 		state,
 		$session,
+		$env,
 		resolve_opts,
 		route
 	});

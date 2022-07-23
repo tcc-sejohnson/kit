@@ -16,6 +16,7 @@ import { domain_matches, path_matches } from './cookie.js';
  *   route: import('types').SSRPage | import('types').SSRErrorPage;
  *   node: import('types').SSRNode;
  *   $session: any;
+ *   $env: any;
  *   stuff: Record<string, any>;
  *   is_error: boolean;
  *   is_leaf: boolean;
@@ -31,6 +32,7 @@ export async function load_node({
 	route,
 	node,
 	$session,
+	$env,
 	stuff,
 	is_error,
 	is_leaf,
