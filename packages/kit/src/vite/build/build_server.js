@@ -26,7 +26,7 @@ const server_template = ({ config, hooks, has_service_worker, runtime, template 
 import root from '__GENERATED__/root.svelte';
 import { respond } from '${runtime}/server/index.js';
 import { set_paths, assets, base } from '${runtime}/paths.js';
-import { set_prerendering } from '${runtime}/env.js';
+import { set_prerendering, set_runtime_env } from '${runtime}/env.js';
 import { set_env } from '${runtime}/app/env/platform.js';
 
 const template = ({ head, body, assets, nonce }) => ${s(template)
@@ -91,6 +91,9 @@ export class Server {
 
 	init({ env }) {
 		set_env(env);
+		if (this.options.hooks) {
+			set_runtime_env(this.options.hooks.getEnv());
+		}
 	}
 
 	async respond(request, options = {}) {
@@ -102,6 +105,7 @@ export class Server {
 			const module = await import(${s(hooks)});
 			this.options.hooks = {
 				getSession: module.getSession || (() => ({})),
+				getEnv: module.getEnv || (() => ({})),
 				handle: module.handle || (({ event, resolve }) => resolve(event)),
 				handleError: module.handleError || (({ error }) => console.error(error.stack)),
 				externalFetch: module.externalFetch || fetch

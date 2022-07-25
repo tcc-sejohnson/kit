@@ -1,6 +1,7 @@
 import { create_client } from './client.js';
 import { init } from './singletons.js';
 import { set_paths } from '../paths.js';
+import { set_runtime_env } from '../env.js';
 
 /**
  * @param {{
@@ -10,6 +11,7 @@ import { set_paths } from '../paths.js';
  *   },
  *   target: Element;
  *   session: any;
+ *   env: any;
  *   route: boolean;
  *   spa: boolean;
  *   trailing_slash: import('types').TrailingSlash;
@@ -22,7 +24,8 @@ import { set_paths } from '../paths.js';
  *   };
  * }} opts
  */
-export async function start({ paths, target, session, route, spa, trailing_slash, hydrate }) {
+export async function start({ paths, target, session, env, route, spa, trailing_slash, hydrate }) {
+	set_runtime_env(env);
 	const client = create_client({
 		target,
 		session,

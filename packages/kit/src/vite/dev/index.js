@@ -236,6 +236,17 @@ export async function dev(vite, vite_config, svelte_config, illegal_imports) {
 				const user_hooks = resolve_entry(svelte_config.kit.files.hooks)
 					? await vite.ssrLoadModule(`/${svelte_config.kit.files.hooks}`)
 					: {};
+				
+				if (user_hooks.getEnv) {
+					const { set_runtime_env } = await vite.ssrLoadModule(
+						process.env.BUNDLED
+							? `/${posixify(
+									path.relative(cwd, `${svelte_config.kit.outDir}/runtime/env.js`)
+							  )}`
+							: `/@fs${runtime}/env.js`
+					);
+					set_runtime_env(user_hooks.getEnv());
+				}
 
 				const { set_env } = await vite.ssrLoadModule(
 					process.env.BUNDLED
@@ -252,6 +263,7 @@ export async function dev(vite, vite_config, svelte_config, illegal_imports) {
 				/** @type {import('types').Hooks} */
 				const hooks = {
 					getSession: user_hooks.getSession || (() => ({})),
+					getEnv: user_hooks.getEnv || (() => ({})),
 					handle,
 					handleError:
 						user_hooks.handleError ||

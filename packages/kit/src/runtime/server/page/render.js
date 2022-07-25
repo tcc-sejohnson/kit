@@ -22,6 +22,7 @@ const updated = {
  *   options: import('types').SSROptions;
  *   state: import('types').SSRState;
  *   $session: any;
+ *   $env: any;
  *   page_config: { hydrate: boolean, router: boolean };
  *   status: number;
  *   error: Error | null;
@@ -35,6 +36,7 @@ export async function render_response({
 	options,
 	state,
 	$session,
+	$env,
 	page_config,
 	status,
 	error = null,
@@ -177,6 +179,9 @@ export async function render_response({
 			paths: ${s(options.paths)},
 			session: ${try_serialize($session, (error) => {
 				throw new Error(`Failed to serialize session data: ${error.message}`);
+			})},
+			env: ${try_serialize($env, (error) => {
+				throw new Error(`Failed to serialize env data: ${error.message}`);
 			})},
 			route: ${!!page_config.router},
 			spa: ${!resolve_opts.ssr},

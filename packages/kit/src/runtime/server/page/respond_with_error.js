@@ -15,6 +15,7 @@ import { GENERIC_ERROR } from '../utils.js';
  *   options: SSROptions;
  *   state: SSRState;
  *   $session: any;
+ *   $env: any;
  *   status: number;
  *   error: Error;
  *   resolve_opts: import('types').RequiredResolveOptions;
@@ -25,6 +26,7 @@ export async function respond_with_error({
 	options,
 	state,
 	$session,
+	$env,
 	status,
 	error,
 	resolve_opts
@@ -45,6 +47,7 @@ export async function respond_with_error({
 					route: GENERIC_ERROR,
 					node: default_layout,
 					$session,
+					$env,
 					stuff: {},
 					is_error: false,
 					is_leaf: false
@@ -63,6 +66,7 @@ export async function respond_with_error({
 					route: GENERIC_ERROR,
 					node: default_error,
 					$session,
+					$env,
 					stuff: layout_loaded ? layout_loaded.stuff : {},
 					is_error: true,
 					is_leaf: false,
@@ -79,6 +83,7 @@ export async function respond_with_error({
 			options,
 			state,
 			$session,
+			$env,
 			page_config: {
 				hydrate: options.hydrate,
 				router: options.router

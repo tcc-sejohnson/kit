@@ -17,13 +17,14 @@ import { coalesce_to_error } from '../../../utils/error.js';
  *   options: SSROptions;
  *   state: SSRState;
  *   $session: any;
+ *   $env: any;
  *   resolve_opts: import('types').RequiredResolveOptions;
  *   route: import('types').SSRPage;
  * }} opts
  * @returns {Promise<Response>}
  */
 export async function respond(opts) {
-	const { event, options, state, $session, route, resolve_opts } = opts;
+	const { event, options, state, $session, $env, route, resolve_opts } = opts;
 
 	/** @type {Array<SSRNode | undefined>} */
 	let nodes;
@@ -58,6 +59,7 @@ export async function respond(opts) {
 			options,
 			state,
 			$session,
+			$env,
 			status: 500,
 			error,
 			resolve_opts
@@ -196,6 +198,7 @@ export async function respond(opts) {
 							options,
 							state,
 							$session,
+							$env,
 							status,
 							error,
 							resolve_opts

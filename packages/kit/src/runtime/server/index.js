@@ -201,6 +201,7 @@ export async function respond(request, options, state) {
 						options,
 						state,
 						$session: await options.hooks.getSession(event),
+						$env: options.hooks.getEnv(),
 						page_config: { router: true, hydrate: true },
 						stuff: {},
 						status: 200,
@@ -292,11 +293,13 @@ export async function respond(request, options, state) {
 				// via a `fetch` in a `load`, render a 404 page
 				if (!state.initiator) {
 					const $session = await options.hooks.getSession(event);
+					const $env = options.hooks.getEnv();
 					return await respond_with_error({
 						event,
 						options,
 						state,
 						$session,
+						$env,
 						status: 404,
 						error: new Error(`Not found: ${event.url.pathname}`),
 						resolve_opts
@@ -345,11 +348,13 @@ export async function respond(request, options, state) {
 		// TODO is this necessary? should we just return a plain 500 at this point?
 		try {
 			const $session = await options.hooks.getSession(event);
+			const $env = options.hooks.getEnv();
 			return await respond_with_error({
 				event,
 				options,
 				state,
 				$session,
+				$env,
 				status: 500,
 				error,
 				resolve_opts

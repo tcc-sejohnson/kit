@@ -2,6 +2,7 @@ import { OutputAsset, OutputChunk } from 'rollup';
 import {
 	Config,
 	ExternalFetch,
+	GetEnv,
 	GetSession,
 	Handle,
 	HandleError,
@@ -88,6 +89,7 @@ export type GetParams = (match: RegExpExecArray) => Record<string, string>;
 export interface Hooks {
 	externalFetch: ExternalFetch;
 	getSession: GetSession;
+	getEnv: GetEnv;
 	handle: Handle;
 	handleError: HandleError;
 }

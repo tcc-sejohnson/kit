@@ -8,4 +8,5 @@ export const browser = !import.meta.env.SSR;
  */
 export const dev = __SVELTEKIT_DEV__;
 
-export { prerendering } from '../env.js';
+export { prerendering, runtimeEnv } from '../env.js';
+
