@@ -101,6 +101,7 @@ export function get_aliases(config) {
 	if (!process.env.BUNDLED) {
 		alias['$app/env/public'] = path.posix.join(config.outDir, 'runtime/app/env/public.js');
 		alias['$app/env/private'] = path.posix.join(config.outDir, 'runtime/app/env/private.js');
+		alias['$app/env/combined'] = path.posix.join(config.outDir, 'runtime/app/env/combined.js');
 	}
 
 	// we set $app after $app/env/* so that the more specific aliases resolve first

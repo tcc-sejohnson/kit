@@ -103,7 +103,8 @@ export interface KitConfig {
 		reportOnly?: CspDirectives;
 	};
 	env?: {
-		publicPrefix: string;
+		public: string[];
+		dynamic: string[];
 	};
 	moduleExtensions?: string[];
 	files?: {

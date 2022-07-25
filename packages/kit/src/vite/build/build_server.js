@@ -28,6 +28,7 @@ import { respond } from '${runtime}/server/index.js';
 import { set_paths, assets, base } from '${runtime}/paths.js';
 import { set_prerendering } from '${runtime}/env.js';
 import { set_env } from '${runtime}/app/env/platform.js';
+import { __set_env } from '${runtime}/app/env/combined.js';
 
 const template = ({ head, body, assets, nonce }) => ${s(template)
 	.replace('%sveltekit.head%', '" + head + "')
@@ -91,6 +92,7 @@ export class Server {
 
 	init({ env }) {
 		set_env(env);
+		__set_env(env);
 	}
 
 	async respond(request, options = {}) {

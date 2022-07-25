@@ -124,7 +124,8 @@ const options = object(
 			),
 
 			env: object({
-				publicPrefix: string('PUBLIC_')
+				public: string_array([]),
+				dynamic: string_array([])
 			}),
 
 			files: object({
