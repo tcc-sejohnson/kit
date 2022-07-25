@@ -15,6 +15,18 @@ export function get_runtime_prefix(config) {
 }
 
 /**
+ * Get the prefix for the `runtime` directory, for use with import declarations
+ * @param {import('types').ValidatedKitConfig} config
+ */
+export function get_env_prefix(config) {
+	if (process.env.BUNDLED) {
+		return posixify_path(path.join(config.outDir, 'env'));
+	}
+
+	return posixify_path(fileURLToPath(new URL('../env', import.meta.url)));
+}
+
+/**
  * Get the resolved path of the `runtime` directory
  * @param {import('types').ValidatedKitConfig} config
  */
@@ -24,6 +36,18 @@ export function get_runtime_directory(config) {
 	}
 
 	return fileURLToPath(new URL('../runtime', import.meta.url));
+}
+
+/**
+ * Get the resolved path of the `runtime` directory
+ * @param {import('types').ValidatedKitConfig} config
+ */
+export function get_env_directory(config) {
+	if (process.env.BUNDLED) {
+		return path.join(config.outDir, 'env');
+	}
+
+	return fileURLToPath(new URL('../env', import.meta.url));
 }
 
 /** @param {string} str */

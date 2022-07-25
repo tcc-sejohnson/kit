@@ -30,7 +30,10 @@ const config = {
 			}
 		},
 		env: {
-			publicPrefix: 'PUBLIC_'
+			buildtimePublicPrefix: 'BT_PUB_',
+			buildtimePrivatePrefix: 'BT_PRIV_',
+			runtimePublicPrefix: 'RT_PUB_',
+			runtimePrivatePrefix: 'RT_PRIV_'
 		},
 		files: {
 			assets: 'static',
@@ -164,7 +167,11 @@ When pages are prerendered, the CSP header is added via a `<meta http-equiv>` ta
 
 Environment variable configuration:
 
-- `publicPrefix` — a prefix that signals that an environment variable is safe to expose to client-side code. See [`$app/env/public`](/docs/modules#$app-env-public)
+- `buildtimePublicPrefix` — a prefix that signals that an environment variable is present at buildtime and safe to expose to client-side code. See [`$env/public`](/docs/modules#$env-public)
+- `buildtimePrivatePrefix` — a prefix that signals that an environment variable is present at buildtime and not safe to expose to client-side code. See [`$env/private`](/docs/modules#$env-private)
+- `runtimePublicPrefix` — a prefix that signals that an environment variable is present at runtime and safe to expose to client-side code. See [`$env/public`](/docs/modules#$env-public)
+- `runtimePrivatePrefix` — a prefix that signals that an environment variable is present at runtime and not safe to expose to client-side code. See [`$env/private`](/docs/modules#$env-private)
+-
 
 ### files
 

@@ -124,7 +124,10 @@ const options = object(
 			),
 
 			env: object({
-				publicPrefix: string('PUBLIC_')
+				buildtimePublicPrefix: string('BT_PUB_'),
+				buildtimePrivatePrefix: string('BT_PRIV_'),
+				runtimePublicPrefix: string('RT_PUB_'),
+				runtimePrivatePrefix: string('RT_PRIV_')
 			}),
 
 			files: object({

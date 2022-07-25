@@ -74,7 +74,10 @@ const get_defaults = (prefix = '') => ({
 		},
 		endpointExtensions: undefined,
 		env: {
-			publicPrefix: 'PUBLIC_'
+			buildtimePublicPrefix: 'BT_PUB_',
+			buildtimePrivatePrefix: 'BT_PRIV_',
+			runtimePublicPrefix: 'RT_PUB_',
+			runtimePrivatePrefix: 'RT_PRIV_'
 		},
 		files: {
 			assets: join(prefix, 'static'),

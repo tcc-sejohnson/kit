@@ -49,6 +49,7 @@ const enforced_config = {
 	resolve: {
 		alias: {
 			$app: true,
+			$env: true,
 			$lib: true,
 			'$service-worker': true
 		}
@@ -189,10 +190,7 @@ function kit() {
 				client_out_dir: `${svelte_config.kit.outDir}/output/client/`
 			};
 
-			illegal_imports = new Set([
-				`${svelte_config.kit.outDir}/runtime/app/env/platform.js`,
-				`${svelte_config.kit.outDir}/runtime/app/env/private.js`
-			]);
+			illegal_imports = new Set([`${svelte_config.kit.outDir}/env/private.js`]);
 
 			if (is_build) {
 				manifest_data = sync.all(svelte_config, config_env.mode).manifest_data;

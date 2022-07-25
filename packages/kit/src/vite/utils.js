@@ -1,7 +1,7 @@
 import fs from 'fs';
 import path from 'path';
 import { loadConfigFromFile } from 'vite';
-import { get_runtime_directory } from '../core/utils.js';
+import { get_runtime_directory, get_env_directory } from '../core/utils.js';
 
 /**
  * @param {import('vite').ConfigEnv} config_env
@@ -99,11 +99,11 @@ export function get_aliases(config) {
 	};
 
 	if (!process.env.BUNDLED) {
-		alias['$app/env/public'] = path.posix.join(config.outDir, 'runtime/app/env/public.js');
-		alias['$app/env/private'] = path.posix.join(config.outDir, 'runtime/app/env/private.js');
+		alias['$env/public'] = path.posix.join(config.outDir, 'env/public.js');
+		alias['$env/private'] = path.posix.join(config.outDir, 'env/private.js');
 	}
 
-	// we set $app after $app/env/* so that the more specific aliases resolve first
+	alias['$env'] = get_env_directory(config);
 	alias['$app'] = `${get_runtime_directory(config)}/app`;
 
 	for (const [key, value] of Object.entries(config.alias)) {
@@ -157,10 +157,10 @@ function repeat(str, times) {
  * @param {import('types').ValidatedKitConfig} config
  */
 export function format_illegal_import_chain(stack, config) {
-	const app = path.join(config.outDir, 'runtime/app');
+	const app = path.join(config.outDir, 'env');
 
 	stack = stack.map((file) => {
-		if (file.startsWith(app)) return file.replace(app, '$app');
+		if (file.startsWith(app)) return file.replace(app, '$env');
 		return path.relative(process.cwd(), file);
 	});
 

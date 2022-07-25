@@ -3,7 +3,7 @@ import path from 'path';
 import { mkdirp, posixify } from '../../utils/filesystem.js';
 import { get_vite_config, merge_vite_configs, resolve_entry } from '../utils.js';
 import { load_template } from '../../core/config/index.js';
-import { get_runtime_directory } from '../../core/utils.js';
+import { get_env_directory, get_runtime_directory } from '../../core/utils.js';
 import {
 	create_build,
 	find_deps,
@@ -19,15 +19,17 @@ import { s } from '../../utils/misc.js';
  *   config: import('types').ValidatedConfig;
  *   has_service_worker: boolean;
  *   runtime: string;
+ *   env: string;
  *   template: string;
  * }} opts
  */
-const server_template = ({ config, hooks, has_service_worker, runtime, template }) => `
+const server_template = ({ config, hooks, has_service_worker, runtime, env, template }) => `
 import root from '__GENERATED__/root.svelte';
 import { respond } from '${runtime}/server/index.js';
 import { set_paths, assets, base } from '${runtime}/paths.js';
 import { set_prerendering } from '${runtime}/env.js';
-import { set_env } from '${runtime}/app/env/platform.js';
+import private_setters from '${env}/private.js';
+import public_setters from '${env}/public.js';
 
 const template = ({ head, body, assets, nonce }) => ${s(template)
 	.replace('%sveltekit.head%', '" + head + "')
@@ -90,7 +92,19 @@ export class Server {
 	}
 
 	init({ env }) {
-		set_env(env);
+    const entries = Object.entries(env)
+		
+		entries
+			.filter(([k]) => k.startsWith('${config.kit.env.runtimePublicPrefix}'))
+			.forEach(([k, v]) => {
+				public_setters[\`__set_\${k.toLowerCase()}\`](v);
+			});
+
+		entries
+			.filter(([k]) => k.startsWith('${config.kit.env.runtimePrivatePrefix}'))
+			.forEach(([k, v]) => {
+				private_setters[\`__set_\${k.toLowerCase()}\`](v);
+			});
 	}
 
 	async respond(request, options = {}) {
@@ -189,6 +203,7 @@ export async function build_server(options, client) {
 			hooks: app_relative(hooks_file),
 			has_service_worker: config.kit.serviceWorker.register && !!service_worker_entry_file,
 			runtime: posixify(path.relative(build_dir, get_runtime_directory(config.kit))),
+			env: posixify(path.relative(build_dir, get_env_directory(config.kit))),
 			template: load_template(cwd, config)
 		})
 	);

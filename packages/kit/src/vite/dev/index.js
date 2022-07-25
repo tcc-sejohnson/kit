@@ -11,8 +11,9 @@ import { parse_route_id } from '../../utils/routing.js';
 import { load_template } from '../../core/config/index.js';
 import { SVELTE_KIT_ASSETS } from '../../core/constants.js';
 import * as sync from '../../core/sync/sync.js';
-import { get_mime_lookup, get_runtime_prefix } from '../../core/utils.js';
+import { get_env_prefix, get_mime_lookup, get_runtime_prefix } from '../../core/utils.js';
 import { format_illegal_import_chain, resolve_entry } from '../utils.js';
+import { loadEnv } from 'vite';
 
 // Vite doesn't expose this so we just copy the list for now
 // https://github.com/vitejs/vite/blob/3edd1af56e980aef56641a5a51cf2932bb580d41/packages/vite/src/node/plugins/css.ts#L96
@@ -33,6 +34,7 @@ export async function dev(vite, vite_config, svelte_config, illegal_imports) {
 	sync.init(svelte_config, vite_config.mode);
 
 	const runtime = get_runtime_prefix(svelte_config.kit);
+	const env_prefix = get_env_prefix(svelte_config.kit);
 
 	/** @type {import('types').Respond} */
 	const respond = (await import(`${runtime}/server/index.js`)).respond;
@@ -237,15 +239,28 @@ export async function dev(vite, vite_config, svelte_config, illegal_imports) {
 					? await vite.ssrLoadModule(`/${svelte_config.kit.files.hooks}`)
 					: {};
 
-				const { set_env } = await vite.ssrLoadModule(
+				const public_env = await vite.ssrLoadModule(
 					process.env.BUNDLED
-						? `/${posixify(
-								path.relative(cwd, `${svelte_config.kit.outDir}/runtime/app/env/platform.js`)
-						  )}`
-						: `/@fs${runtime}/app/env/platform.js`
+						? `/${posixify(path.relative(cwd, `${svelte_config.kit.outDir}/env/public.js`))}`
+						: `/@fs${env_prefix}/env/public.js`
+				);
+				const private_env = await vite.ssrLoadModule(
+					process.env.BUNDLED
+						? `/${posixify(path.relative(cwd, `${svelte_config.kit.outDir}/env/private.js`))}`
+						: `/@fs${env_prefix}/env/private.js`
 				);
 
-				set_env(process.env);
+				Object.entries(
+					loadEnv(vite_config.mode, process.cwd(), svelte_config.kit.env.runtimePublicPrefix)
+				).forEach(([k, v]) => {
+					public_env.default[`__set_${k.toLowerCase()}`](v);
+				});
+
+				Object.entries(
+					loadEnv(vite_config.mode, process.cwd(), svelte_config.kit.env.runtimePrivatePrefix)
+				).forEach(([k, v]) => {
+					private_env.default[`__set_${k.toLowerCase()}`](v);
+				});
 
 				const handle = user_hooks.handle || (({ event, resolve }) => resolve(event));
 

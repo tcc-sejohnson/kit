@@ -103,7 +103,10 @@ export interface KitConfig {
 		reportOnly?: CspDirectives;
 	};
 	env?: {
-		publicPrefix: string;
+		buildtimePublicPrefix: string;
+		buildtimePrivatePrefix: string;
+		runtimePublicPrefix: string;
+		runtimePrivatePrefix: string;
 	};
 	moduleExtensions?: string[];
 	files?: {

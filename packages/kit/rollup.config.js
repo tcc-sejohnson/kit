@@ -23,7 +23,6 @@ export default [
 			'app/stores': 'src/runtime/app/stores.js',
 			'app/paths': 'src/runtime/app/paths.js',
 			'app/env': 'src/runtime/app/env.js',
-			'app/env/platform': 'src/runtime/app/env/platform.js',
 			paths: 'src/runtime/paths.js',
 			env: 'src/runtime/env.js'
 		},

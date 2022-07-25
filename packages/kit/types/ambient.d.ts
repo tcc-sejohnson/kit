@@ -17,7 +17,7 @@
  * }
  * ```
  *
- * By populating these interfaces, you will gain type safety when using `env`, `event.locals`, `event.platform`, `session` and `stuff`.
+ * By populating these interfaces, you will gain type safety when using `event.locals`, `event.platform`, `session` and `stuff`.
  *
  * Note that since it's an ambient declaration file, you have to be careful when using `import` statements. Once you add an `import`
  * at the top level, the declaration file is no longer considered ambient and you lose access to these typings in other files.
@@ -44,11 +44,6 @@
  *
  */
 declare namespace App {
-	/**
-	 * The interface that defines the dynamic environment variables exported from '$app/env/platform'.
-	 */
-	export interface Env extends Record<string, string> {}
-
 	/**
 	 * The interface that defines `event.locals`, which can be accessed in [hooks](https://kit.svelte.dev/docs/hooks) (`handle`, `handleError` and `getSession`) and [endpoints](https://kit.svelte.dev/docs/routing#endpoints).
 	 */
@@ -90,22 +85,6 @@ declare module '$app/env' {
 	 * `true` when prerendering, `false` otherwise.
 	 */
 	export const prerendering: boolean;
-}
-
-/**
- * This module provides access to runtime environment variables, as defined by the platform you're running on. For example
- * if you're using [`adapter-node`](https://github.com/sveltejs/kit/tree/master/packages/adapter-node) (or running
- * [`vite preview`](https://kit.svelte.dev/docs/cli)), this is equivalent to `process.env`.
- *
- * This module cannot be imported into client-side code.
- *
- * ```ts
- * import { env } from '$app/env/platform';
- * console.log(env.MY_DEPLOYMENT_SPECIFIC_VARIABLE);
- * ```
- */
-declare module '$app/env/platform' {
-	export let env: App.Env;
 }
 
 /**

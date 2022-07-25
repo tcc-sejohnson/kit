@@ -1,6 +1,6 @@
 import { modules } from '../../../../../../packages/kit/docs/types.js';
 
-const exempt = new Set(['$lib', '$app/env/public', '$app/env/private']);
+const exempt = new Set(['$lib', '$env/public', '$env/private']);
 
 /** @param {'types' | 'exports'} kind */
 export function render_modules(kind) {
